@@ -1,0 +1,24 @@
+# Arquivos de compilação Java
+*.class
+
+# Arquivos gerados pelo compilador
+*.jar
+*.war
+*.ear
+
+# Diretório de saída do compilador
+out/
+
+# Arquivos específicos de sistema
+Thumbs.db
+.DS_Store
+
+# Arquivos temporários
+*.tmp
+*.log
+
+# Arquivos da IDE (por exemplo, IntelliJ, Eclipse)
+.idea/
+*.iml
+*.iws
+*.ipr
