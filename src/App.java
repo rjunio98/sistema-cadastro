@@ -1,22 +1,32 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.Locale;
+import java.util.Scanner;
 
-public class App  {
+import entities.LeitorArquivo;
+import entities.Usuario;
+
+public class App {
     public static void main(String[] args) {
+        LeitorArquivo leitor = new LeitorArquivo();
+        leitor.lerArquivo();
 
-        String path = ("C:\\Users\\Gamer\\OneDrive\\Documentos\\sistema-cadastro\\sistema cadastro//formulario.txt");
+        try (Scanner sc = new Scanner(System.in).useLocale(Locale.US)) {
+            System.out.println();
 
-        try(BufferedReader br = new BufferedReader(new FileReader(path))) {
-            String line = br.readLine();
+            System.out.print("Qual seu nome completo? ");
+            String nome = sc.nextLine();
 
-            while (line != null) {
-                System.out.println(line);
-                line = br.readLine();
-            }
+            System.out.print("Qual seu email de contato? ");
+            String email = sc.nextLine();
 
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+            System.out.print("Qual sua idade? ");
+            Integer idade = sc.nextInt();
+
+            System.out.print("Qual sua altura? ");
+            Double altura = sc.nextDouble();
+            sc.nextLine();
+
+            Usuario usuario = new Usuario(nome, email, idade, altura);
+            System.out.println(usuario.toString());
+        }   
     }
-}
+} 
