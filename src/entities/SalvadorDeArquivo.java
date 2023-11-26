@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class SalvadorDeArquivo {
 
-    private static int contadorArquivos = 1;
+    private static Integer contadorArquivos = 1;
 
     public static void salvarRespostas(Usuario usuario) {
         String nomeArquivo = criarNomeArquivo(usuario.getNome());
