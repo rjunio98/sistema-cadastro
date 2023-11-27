@@ -8,7 +8,7 @@ public class SalvadorDeArquivo {
 
     private static Integer contadorArquivos = 1;
 
-    public static void salvarRespostas(Usuario usuario) {
+    public void salvarRespostas(Usuario usuario) {
         String nomeArquivo = criarNomeArquivo(usuario.getNome());
         String conteudoArquivo = formatarConteudo(usuario);
 
