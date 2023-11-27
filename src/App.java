@@ -61,25 +61,21 @@ public class App {
         System.out.println();
     
         System.out.print("Qual seu nome completo? ");
+        scanner.nextLine();  // Adicione esta linha para consumir a quebra de linha pendente
         String nome = scanner.nextLine();
-    
-        scanner.nextLine();
     
         System.out.print("Qual seu email de contato? ");
         String email = scanner.nextLine();
     
         System.out.print("Qual sua idade? ");
         Integer idade = scanner.nextInt();
-        scanner.nextLine(); 
+        scanner.nextLine();
     
         System.out.print("Qual sua altura? ");
         Double altura = scanner.nextDouble();
-        scanner.nextLine(); 
+        scanner.nextLine();
     
         System.out.println();
-    
         return new Usuario(nome, email, idade, altura);
-    }
-    
-    
+    } 
 }

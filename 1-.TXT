@@ -1,4 +1,0 @@
-Nome: 
-Email: robledojunior@yahoo.com.br
-Idade: 20
-Altura: 1.9

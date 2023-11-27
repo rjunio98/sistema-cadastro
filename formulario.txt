@@ -1,4 +1,11 @@
 Qual seu nome completo?
 Qual seu email de contato?
 Qual sua idade?
-Qual sua altura?Qual o seu pet
+Qual o seu pet?
+Qual a sua altura?
+qual o seu carro?
+Qual seu nome completo?
+Qual seu email de contato?
+Qual sua idade?
+Qual o seu pet?
+Qual a sua altura?

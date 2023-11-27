@@ -8,36 +8,37 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MenuPrincipal {
-    List<Usuario> listaDeUsuarios = new ArrayList<>();
+    private final List<Usuario> listaDeUsuarios = new ArrayList<>();
+    private final LeitorArquivo leitorArquivo = new LeitorArquivo();
+    private final Scanner scanner = new Scanner(System.in);
 
-    public void listarUsuariosCadastrados(){
-        System.out.println("Lista de Usuários Cadastrados:");
-        for(Usuario usuario: listaDeUsuarios){
-            System.out.println("Nome:" + usuario.getNome());
-        }
+    public void adicionarUsuario(Usuario usuario) {
+        listaDeUsuarios.add(usuario);
+        System.out.println("Usuário adicionado com sucesso!");
     }
 
-     public void cadastrarNovaPergunta() {
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.print("Digite a nova pergunta: ");
-            String novaPergunta = scanner.nextLine();
+    public void listarUsuariosCadastrados() {
+        System.out.println("Lista de Usuários Cadastrados:");
+        listaDeUsuarios.forEach(System.out::println);
+    }
 
-            adicionarPerguntaAoArquivo(novaPergunta);
+    public void cadastrarNovaPergunta() {
+        System.out.print("Digite a nova pergunta: ");
+        String novaPergunta = scanner.nextLine();
 
-            System.out.println("Nova pergunta cadastrada com sucesso!");
+        adicionarPerguntaAoArquivo(novaPergunta);
+
+        System.out.println("Nova pergunta cadastrada com sucesso!");
+    }
+
+    private void adicionarPerguntaAoArquivo(String novaPergunta) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("formulario.txt", true))) {
+            writer.write(novaPergunta);
+            writer.newLine(); // Adiciona uma nova linha para a próxima pergunta
         } catch (IOException e) {
             System.out.println("Erro ao cadastrar a nova pergunta: " + e.getMessage());
         }
     }
-
-    private void adicionarPerguntaAoArquivo(String novaPergunta) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("formulario.txt", true))) {
-            writer.write(novaPergunta);
-            writer.newLine(); // Adiciona uma nova linha para a próxima pergunta
-        }
-    }
-
-    private LeitorArquivo leitorArquivo = new LeitorArquivo();
 
     public void deletarPergunta() {
         List<String> perguntas = leitorArquivo.obterPerguntasDoFormulario();
@@ -53,24 +54,23 @@ public class MenuPrincipal {
         }
 
         System.out.print("Digite o número da pergunta a ser deletada: ");
-        try (Scanner scanner = new Scanner(System.in)) {
-            int numeroPergunta = scanner.nextInt();
-            scanner.nextLine();  // Consumir a quebra de linha
+        int numeroPergunta = scanner.nextInt();
+        scanner.nextLine(); // Consumir a quebra de linha
 
-            if (numeroPergunta < 1 || numeroPergunta > perguntas.size()) {
-                System.out.println("Número de pergunta inválido.");
-                return;
-            }
-
-            String perguntaRemovida = perguntas.remove(numeroPergunta - 1);
-            leitorArquivo.salvarPerguntasNoArquivo(perguntas);
-
-            System.out.println("Pergunta \"" + perguntaRemovida + "\" removida com sucesso.");
+        if (numeroPergunta < 1 || numeroPergunta > perguntas.size()) {
+            System.out.println("Número de pergunta inválido.");
+            return;
         }
+
+        String perguntaRemovida = perguntas.remove(numeroPergunta - 1);
+        leitorArquivo.salvarPerguntasNoArquivo(perguntas);
+
+        System.out.println("Pergunta \"" + perguntaRemovida + "\" removida com sucesso.");
     }
 
-
     public void pesquisarUsuario() {
+        List<Usuario> listaDeUsuarios = leitorArquivo.obterUsuariosDoArquivo();
+
         if (listaDeUsuarios.isEmpty()) {
             System.out.println("Não há usuários para pesquisar.");
             return;
@@ -80,65 +80,55 @@ public class MenuPrincipal {
         System.out.println("1 - Por nome");
         System.out.println("2 - Por idade");
         System.out.println("3 - Por e-mail");
-        
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.print("Escolha a opção de pesquisa (1-3): ");
-            int opcao = scanner.nextInt();
-            scanner.nextLine();  // Consumir a quebra de linha
 
-            switch (opcao) {
-                case 1:
-                    pesquisarPorNome();
-                    break;
-                case 2:
-                    pesquisarPorIdade();
-                    break;
-                case 3:
-                    pesquisarPorEmail();
-                    break;
-                default:
-                    System.out.println("Opção inválida.");
-            }
+        System.out.print("Escolha a opção de pesquisa (1-3): ");
+        int opcao = scanner.nextInt();
+        scanner.nextLine(); // Consumir a quebra de linha
+
+        switch (opcao) {
+            case 1:
+                pesquisarPorNome(listaDeUsuarios);
+                break;
+            case 2:
+                pesquisarPorIdade(listaDeUsuarios);
+                break;
+            case 3:
+                pesquisarPorEmail(listaDeUsuarios);
+                break;
+            default:
+                System.out.println("Opção inválida.");
         }
     }
 
-    private void pesquisarPorNome() {
+    private void pesquisarPorNome(List<Usuario> listaDeUsuarios) {
         System.out.print("Digite o nome para pesquisa: ");
-        String nomePesquisa;
-        try (Scanner scanner = new Scanner(System.in)) {
-            nomePesquisa = scanner.nextLine().toLowerCase();
-        }
-    
+        String nomePesquisa = scanner.nextLine().toLowerCase();
+
         listaDeUsuarios.stream()
                 .filter(usuario -> usuario.getNome().toLowerCase().contains(nomePesquisa))
                 .forEach(usuario -> System.out.println(usuario));
     }
-    
-    private void pesquisarPorIdade() {
+
+    private void pesquisarPorIdade(List<Usuario> listaDeUsuarios) {
         System.out.print("Digite a idade para pesquisa: ");
-        int idadePesquisa;
-        try (Scanner scanner = new Scanner(System.in)) {
-            idadePesquisa = scanner.nextInt();
-        }
-    
+        int idadePesquisa = scanner.nextInt();
+        scanner.nextLine(); // Consumir a quebra de linha
+
         listaDeUsuarios.stream()
                 .filter(usuario -> usuario.getIdade() == idadePesquisa)
                 .forEach(usuario -> System.out.println(usuario));
     }
-    
-    private void pesquisarPorEmail() {
+
+    private void pesquisarPorEmail(List<Usuario> listaDeUsuarios) {
         System.out.print("Digite o e-mail para pesquisa: ");
-        String emailPesquisa;
-        try (Scanner scanner = new Scanner(System.in)) {
-            emailPesquisa = scanner.nextLine().toLowerCase();
-        }
-    
+        String emailPesquisa = scanner.nextLine().toLowerCase();
+
         listaDeUsuarios.stream()
                 .filter(usuario -> usuario.getEmail().toLowerCase().contains(emailPesquisa))
                 .forEach(usuario -> System.out.println(usuario));
     }
 
-    public void adicionarUsuario(Usuario usuario) {
+    public void fecharScanner() {
+        scanner.close();
     }
-    
 }
